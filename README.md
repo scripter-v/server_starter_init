@@ -1,6 +1,11 @@
 #Server::Starter init
 
-At this time here is only debian init-script. It can be used with any PSGI-server with [Server::Starter](https://metacpan.org/pod/Server::Starter) support. Just copy 'sstarter' to init.d dir: `cp sstarter /etc/init.d/ && chmod +x /etc/init.d/sstarter` and set following variables:
+##Requirements
+* [Server::Starter](https://metacpan.org/pod/Server::Starter)
+* Your preffered PSGI server ([Twiggy](https://metacpan.org/pod/Twiggy) for example).
+
+##Install
+At this time here is only the init-script for debian. It can be used with any PSGI-server with [Server::Starter](https://metacpan.org/pod/Server::Starter) support. Just copy 'sstarter' to init.d dir: `cp sstarter /etc/init.d/` and make them executable: `sudo chmod +x /etc/init.d/sstarter`. Then edit following variables in `/etc/init.d/sstarter`:
 ```
 MAX_WORKERS=2
 PSGI_APP='/path_to_psgi_app/app.psgi'
