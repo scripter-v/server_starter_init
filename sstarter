@@ -1,0 +1,78 @@
+#!/bin/sh
+
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+DAEMON=/usr/local/bin/start_server
+NAME=start_server
+DESC=start_server
+RUNDIR=/var/run/start_server
+
+PIDFILE=$RUNDIR/start_server.pid
+STATUSFILE=$RUNDIR/start_server.status
+SOCKET=$RUNDIR/sstarter.sock
+#PORT=5000
+
+MAX_WORKERS=2
+PSGI_APP='/path_to_your_app_dir/app.psgi'
+
+HTTP_SERVER="plackup --no-default-middleware -s Twiggy::Prefork --max-workers $MAX_WORKERS -a $PSGI_APP"
+LOGGER="2>&1 | logger -p daemon.notice -t $DESC"
+DAEMON_ARGS="--path $SOCKET -- $HTTP_SERVER $LOGGER"
+
+case "$1" in
+  start)
+    echo -n "Starting $DESC: "
+
+    mkdir -p $RUNDIR
+    chown www-data:www-data $RUNDIR
+    chmod 755 $RUNDIR
+
+    if start-stop-daemon --start --name $NAME --pidfile $PIDFILE \
+        --chuid www-data:www-data --exec /usr/bin/perl --startas \
+        /bin/bash -- -c "$DAEMON --pid-file $PIDFILE --status-file $STATUSFILE $DAEMON_ARGS &"
+    then
+      echo "$NAME."
+    else
+      echo "failed"
+    fi
+    ;;
+
+  stop)
+    echo -n "Stopping $DESC: "
+    if start-stop-daemon --stop --retry 60/TERM/10 --quiet --oknodo \
+        --name $NAME --pidfile $PIDFILE
+    then
+      echo "$NAME."
+    else
+      echo "failed"
+    fi
+    sleep 1
+    ;;
+
+  reload)
+    echo -n "Reloading $DESC: "
+    if $DAEMON --pid-file $PIDFILE --status-file $STATUSFILE --restart
+    then
+      echo "$NAME."
+    else
+      echo "failed"
+    fi
+    ;;
+
+  restart)
+    ${0} stop
+    ${0} start
+    ;;
+
+  status)
+    echo -n "$DESC is "
+    if start-stop-daemon --stop --quiet --signal 0 --name ${NAME} --pidfile ${PIDFILE}
+    then
+      echo "running"
+    else
+      echo "not running"
+      exit 1
+    fi
+    ;;
+esac
+
+exit 0
