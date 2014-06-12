@@ -2,7 +2,7 @@
 
 ##Requirements
 * [Server::Starter](https://metacpan.org/pod/Server::Starter)
-* Your preffered PSGI server ([Twiggy](https://metacpan.org/pod/Twiggy) for example).
+* Your preffered PSGI server ([Twiggy::Prefork](https://metacpan.org/pod/Twiggy::Prefork) for example).
 
 ##Install
 At this time here is only the init-script for debian. It can be used with any PSGI-server with [Server::Starter](https://metacpan.org/pod/Server::Starter) support. Just copy 'sstarter' to init.d dir: `cp sstarter /etc/init.d/` and make them executable: `sudo chmod +x /etc/init.d/sstarter`. Then edit following variables in `/etc/init.d/sstarter`:
