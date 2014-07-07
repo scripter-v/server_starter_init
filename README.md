@@ -5,7 +5,7 @@
 * Your preffered PSGI server ([Twiggy::Prefork](https://metacpan.org/pod/Twiggy::Prefork) for example).
 
 ##Install
-At this time here is only the init-script for debian. It can be used with any PSGI-server with [Server::Starter](https://metacpan.org/pod/Server::Starter) support. Just copy 'sstarter' to init.d dir: `cp sstarter /etc/init.d/` and make them executable: `sudo chmod +x /etc/init.d/sstarter`. Then edit following variables in `/etc/init.d/sstarter`:
+At this time here is only the init-script for debian. It can be used with any PSGI-server that has [Server::Starter](https://metacpan.org/pod/Server::Starter) support. Just copy 'sstarter' to init.d dir: `cp sstarter /etc/init.d/` and make it executable: `sudo chmod +x /etc/init.d/sstarter`. Then edit following variables in `/etc/init.d/sstarter`:
 ```
 MAX_WORKERS=2
 PSGI_APP='/path_to_psgi_app/app.psgi'
